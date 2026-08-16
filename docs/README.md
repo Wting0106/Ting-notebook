@@ -1,11 +1,18 @@
 # Ting~Notebook
 
-我的科研笔记
+---
+
+home: true
+heroText: Ting~Notebook
+
+tagline: 我的科研笔记
+
+---
 
 ## Research
 
-- 3D Gaussian Splatting
-- 3DGS scene understandering
-- SLAM
-- Deep Learning
-- Robotics
+- [3D Gaussian Splatting](/3DGS/)
+- [3DGS Scene Understanding](/3DGS-scene/)
+- [SLAM](/SLAM/)
+- [Deep Learning](/DeepLearning/)
+- [Robotics](/Robotics/)
