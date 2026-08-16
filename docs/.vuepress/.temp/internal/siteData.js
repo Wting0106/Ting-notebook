@@ -1,0 +1,1 @@
+export const siteData = JSON.parse("{\"base\":\"/\",\"lang\":\"zh-CN\",\"title\":\"Ting Notebook\",\"description\":\"3DGS SLAM Deep Learning Notes\",\"head\":[],\"locales\":{\"/\":{\"lang\":\"zh-CN\",\"title\":\"Ting Notebook\",\"description\":\"3DGS SLAM Deep Learning Notes\"}}}")

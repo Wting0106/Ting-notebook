@@ -13,11 +13,11 @@ export default {
             '/3DGS/': [
                 {
                     title: '3D Gaussian Splatting',
-                    collapsable: false,
+                    collapsable: true,
 
                     children: [
-                        '',
-                        'TEST0-Implicit-Neural-Representation'
+                        '/3DGS/',
+                        '/3DGS/TEST0-Implicit-Neural-Representation'
                     ]
                 }
             ]
