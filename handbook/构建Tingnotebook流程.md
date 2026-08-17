@@ -4,6 +4,57 @@
 
 [yindaheng98.github.io/]: 
 
+## 涉及的配置：
+
+```
+Markdown 文档
+      |
+      ↓
+VuePress 静态网站生成器
+      |
+      ↓
+Node.js 环境运行
+      |
+      ↓
+npm 管理依赖
+      |
+      ↓
+Git 提交代码
+      |
+      ↓
+GitHub Actions 自动构建
+      |
+      ↓
+GitHub Pages 部署
+      |
+      ↓
+https://xxx.github.io
+```
+
+**Node.js :** 可以让 JavaScript 可以脱离浏览器运行的运行环境。传统（浏览器-js程序），node.js（电脑系统-node.js-js程序），**node_modules**就是存放这个环境所需要的依赖
+
+**VuePress ：**基于 Vue 的<u>静态网站</u>生成器（主要用于：技术博客、文档网站），它会读取md，生成HTML网站。 它本质是一个JavaScript，所以需要node.js。 
+
+**JavaScript ：** JavaScript 和 Java 没有直接关系。JavaScript 是一种脚本语言，是为了给网页增加交互能力。JavaScript用在网页交互、前端、Node后端，java用在后端、android
+
+**npm：**包管理工具（Node Package Manager），Node.js 的包管理工具。类似于`pip install torch`，Node里就是`npm install vuepress`
+
+**package.json:** 类似于requirements.txt。 只是在Node中需要配置的json，比如这个项目需要VuePress 1.9.10。所以它的版本十分重要
+
+**VuePress config.js：** 告诉 VuePress 网站应该怎么生成（网站名字、路径、sidebar侧边栏）
+
+**GitHub Actions：**GitHub提供的自动化运行平台。git push后它会自动启动actions，接着自动进行`npm install`  和`npm run docs:build`
+
+**GitHub Pages：** GitHub提供的静态网页托管服务。
+
+**deploy.yml**： 自动部署文件（.github-workflows-deploy.yml），它会在`npm install`、
+
+`npm run docs:build`的时候被执行
+
+**静态网页与动态网页：**前者提前生成内容，通常不需要访问数据库，适合博客文档（比如Github pages）。后者访问时生成内容，通常需访问数据库，服务器压力大（比如：淘宝、知乎）
+
+
+
 ## 1.本地部署
 
 ```
