@@ -17,7 +17,8 @@ module.exports = {
 
                     children: [
                         '/3DGS/',
-                        '/3DGS/TEST0-Implicit-Neural-Representation'
+                        '/3DGS/TEST0-Implicit-Neural-Representation',
+                        '/3DGS/3D Gaussian Splatting.md'
                     ]
                 }
             ]
