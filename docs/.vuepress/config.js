@@ -11,9 +11,16 @@ module.exports = {
         sidebar: {
 
             '/3DGS/': [
-                '',
-                'TEST0-Implicit-Neural-Representation',
-                '3D_Gaussian_Splatting'
+                {
+                    title: '3D Gaussian Splatting',
+                    collapsable: false,
+
+                    children: [
+                        'README',
+                        'TEST0-Implicit-Neural-Representation',
+                        '3D_Gaussian_Splatting'
+                    ]
+                }
             ]
 
         }
