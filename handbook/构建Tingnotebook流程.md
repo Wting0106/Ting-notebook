@@ -346,3 +346,12 @@ GitHub Actions ✓
 ```
 
 网页自动更新。
+
+**如果没有自动更新，** ：
+
+1.可以先看一下`npm run docs:dev `和 `npm run docs:build  `是否成功
+
+2.Github——actions——pages-build-deployment 看一下最新的更新时间，确定是否自动更新了
+
+可能是缓存问题
+
