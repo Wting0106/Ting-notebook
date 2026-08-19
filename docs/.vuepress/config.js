@@ -18,7 +18,7 @@ module.exports = {
                     children: [
                         '',
                         'TEST0-Implicit-Neural-Representation',
-                        '3D_Gaussian_Splatting'
+                        '3D_Gaussian'
                     ]
                 }
             ]
