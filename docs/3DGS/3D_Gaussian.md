@@ -10,7 +10,9 @@
 
 **1D高斯即正态分布：**
 
-$N_{\mu ,\sigma}\left( x \right) =\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{\left( x-\mu \right) ^2}{2\sigma ^2}}$
+$$
+N_{\mu ,\sigma}\left( x \right) =\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{\left( x-\mu \right) ^2}{2\sigma ^2}}
+$$
 
 其图像为一个单钟形对称曲线，均值$\mu$控制对称轴进而控制图形位置，标准差$\sigma$控制密度集中程度。对一段$x$区间进行积分可以得到分布中的数据落在这一区间的概率，其中绝大多数落在$\left[ \mu -3\sigma ,\mu +3\sigma \right]$（概率：0\.9974）。
 
@@ -18,7 +20,9 @@ $N_{\mu ,\sigma}\left( x \right) =\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{\left( x-
 
 **3D高斯的正态分布：**
 
-$N_{\mu _x,\sigma _x,\mu _y,\sigma _y,\mu _z,\sigma _z}\left( x,y,z \right) =\frac{1}{\sqrt{2\pi} ^3\sigma _x\sigma _y\sigma _z}\exp \left( -\frac{\left( x-\mu _x \right) ^2}{2{\sigma _x}^2}-\frac{\left( y-\mu _y \right) ^2}{2{\sigma _y}^2}-\frac{\left( z-\mu _z \right) ^2}{2{\sigma _z}^2} \right)$
+$$
+N_{\mu _x,\sigma _x,\mu _y,\sigma _y,\mu _z,\sigma _z}\left( x,y,z \right) =\frac{1}{\sqrt{2\pi} ^3\sigma _x\sigma _y\sigma _z}\exp \left( -\frac{\left( x-\mu _x \right) ^2}{2{\sigma _x}^2}-\frac{\left( y-\mu _y \right) ^2}{2{\sigma _y}^2}-\frac{\left( z-\mu _z \right) ^2}{2{\sigma _z}^2} \right)
+$$
 
 
 
@@ -44,9 +48,9 @@ $N_{\mu _x,\sigma _x,\mu _y,\sigma _y,\mu _z,\sigma _z}\left( x,y,z \right) =\fr
 
 $p(x_1, \cdots, x_n) = \frac{1}{(2 \pi)^{\frac{n}{2}} \left| \Sigma \right|^{\frac{1}{2}}} \cdot e^{-\frac{1}{2} \cdot [(\vec{X} - \vec{\mu})^\top \Sigma^{-1}(\vec{X} - \vec{\mu})]}$
 
-三维的情况，用$\bm x=[x,y,z]^T$表示三维空间中的坐标：
+三维的情况，用$\mathbf{x}=[x,y,z]^T$表示三维空间中的坐标：
 
-$p(\bm x) = \frac{1}{\sqrt{2\pi}^3\det(\Sigma)} \cdot e^{-\frac{1}{2}(\bm x - \bm\mu)^T \Sigma^{-1}(\bm x - \bm\mu)}$
+$p(\mathbf{x}) = \frac{1}{\sqrt{2\pi}^3\det(\Sigma)} \cdot e^{-\frac{1}{2}(\mathbf{x} - \vec{\mu})^T \Sigma^{-1}(\mathbf{x} - \vec{\mu})}$
 
 此时协方差矩阵$\Sigma$为：
 
@@ -57,7 +61,7 @@ $\Sigma=
          \mathrm{Cov}\left( z,x \right)&                \mathrm{Cov}\left( z,y \right)&                \sigma _{z}^{2}\\
 \end{matrix} \right]$
 
-其中$\bm\mu$是椭球中心（控制世界空间位置平移），协方差矩阵$\Sigma$控制椭球在3轴向的伸缩和旋转（模型坐标系），协方差矩阵的特征向量就是椭球对称轴（即，特征向量代表椭球三个主轴方向）
+其中$\vec{\mu}$是椭球中心（控制世界空间位置平移），协方差矩阵$\Sigma$控制椭球在3轴向的伸缩和旋转（模型坐标系），协方差矩阵的特征向量就是椭球对称轴（即，特征向量代表椭球三个主轴方向）
 
 > 注：在数学上每个高斯分布都覆盖整个空间，当它是椭球是因为它的等高线是椭球。计算的时候显然不能每个像素点上对每个高斯点都采个样，所以实际使用中会把距离中心较远的地方截掉（本文是在概率积分$99\%$的等高线截），截了就看着是一个中心透明度高周围透明度低的椭球。
 > 
@@ -65,13 +69,13 @@ $\Sigma=
 
 论文中的定义方式：
 
-$G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\bm x \right)}$
+$G\left(\mathbf{x} \right) =e^{-\frac{1}{2}\left(\mathbf{x} \right) ^T\Sigma ^{-1}\left(\mathbf{x} \right)}$
 
 和标准形式对比可以看到：
 
 - 默认模型坐标中心在坐标系原点，方便旋转放缩，放入世界坐标系时再加上平移
 
-- 去掉了指数部分前面的归一化系数，所以在空间上的积分不为1，而是在$\bm x=[0,0,0]^T$处值等于1，所以是一个中间不透明（$G\left(\bm x \right)$值为1），越往四周越透明的椭球。
+- 去掉了指数部分前面的归一化系数，所以在空间上的积分不为1，而是在$\mathbf{x}=[0,0,0]^T$处值等于1，所以是一个中间不透明（$G\left(\mathbf{x} \right)$值为1），越往四周越透明的椭球。
 
     - 论文中用一个不透明度值$\alpha$控制Gaussian点整体的透明度，可以让Gaussian点中间也透明
 
@@ -85,7 +89,7 @@ $G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\b
 
 > 像泰勒展开、傅里叶展开中也是一组基函数构成的：
 > 
-> 比如泰勒展开以多项式函数系$\{1,x-x_0,(x-x_0)^2,(x-x_0)^3,\dots,y_{n}=(x-x_0)^n,\dots\}$为基函数，
+> 比如泰勒展开以多项式函数系$\{1,x-x_0,(x-x_0)^2,(x-x_0)^3,\ldots,y_{n}=(x-x_0)^n,\ldots\}$为基函数，
 > 
 > 在对函数$f(x)$的泰勒展开中：
 > 
@@ -94,7 +98,7 @@ $G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\b
 > &=\sum_{n=0}^\infty\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n
 > \end{aligned}$
 > 
-> $\{\frac{f(x_0)}{0!},\frac{f'(x_0)}{1!},\frac{f''(x_0)}{2!},\dots,\frac{f^{(n)}(x_0)}{n!},\dots\}$就是这组基函数的系数。
+> $\{\frac{f(x_0)}{0!},\frac{f'(x_0)}{1!},\frac{f''(x_0)}{2!},\ldots,\frac{f^{(n)}(x_0)}{n!},\ldots\}$就是这组基函数的系数。
 > 
 > 有了基函数，就可以把任意一个函数，描述成几个基函数的加权和了。
 > 
@@ -171,5 +175,3 @@ Z_w
 \end{bmatrix}
 +
 t$
-
-

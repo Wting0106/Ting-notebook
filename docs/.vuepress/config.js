@@ -11,7 +11,9 @@ module.exports = {
             'link',
             {
                 rel: 'stylesheet',
-                href: 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css'
+                // markdown-it-katex 2.0.3 renders with KaTeX 0.6.0.
+                // Its generated markup must use the matching stylesheet.
+                href: 'https://cdn.jsdelivr.net/npm/katex@0.6.0/dist/katex.min.css'
             }
         ]
     ],
