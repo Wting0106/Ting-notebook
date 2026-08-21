@@ -110,11 +110,11 @@ $G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\b
 
 这里以原文作者举例的二维SH表示的各基函数，可以形象的看到越复杂的基函数可以表示的二维方向可以更多。
 
-![image\.png](图片和附件/image%201.png)
+![3D Gaussian 示意图](./assets/image-1.png)
 
 三维基函数同理：
 
-![image\.png](图片和附件/image.png)
+![3D Gaussian 示意图](./assets/image.png)
 
 用于记录空间中某个点从不同方向看过去的不同颜色，这在点云渲染中非常有用，3DGS就是用球谐函数记录空间中的Gaussian点在不同方向的颜色。
 
@@ -171,6 +171,5 @@ Z_w
 \end{bmatrix}
 +
 t$
-
 
 

@@ -35,15 +35,15 @@
 
 **隐式辐射场**：在NeRF中，使用MLP 网络用于将一组空间坐标 (𝑥,𝑦,𝑧) 和观察方向 (𝜃,𝜙) 映射到颜色和密度值。任何点处的辐射不是显式存储的，而是<font color='blue'>**通过<u>查询</u>神经网络实时计算得出**</font>
 
-![image-20240727150142383](D:\Ting-notebook\Ting-notebook-photo\image-20240727150142383.png)
+![隐式辐射场示意图](./assets/image-20240727150142383.png)
 
 **显式辐射场：**与隐式不同的是，显示是直接表示光在离散空间结构中的分布，比如体素网格或点云。该结构中的<font color='blue'>**每个元素都存储了其在空间中相应位置的辐射信息，而不是像NeRF一样去执行查询的操作**</font>，所以他会更直接也更快的得到每个值，但是同时也需要更大内存使用和导致较低的分辨率。
 
-![image-20240727150155676](D:\Ting-notebook\Ting-notebook-photo\image-20240727150155676.png)
+![显式辐射场示意图](./assets/image-20240727150155676.png)
 
 **3D Gaussian Splatting：** 利用了显式辐射场和隐式辐射场的优势
 
-![image-20240727150254801](D:\Ting-notebook\Ting-notebook-photo\image-20240727150254801.png)
+![3D Gaussian Splatting 示意图](./assets/image-20240727150254801.png)
 
 <font color='blue'>**隐式表征使用MLP而非CNN的原因！：**</font>
 
@@ -198,9 +198,11 @@ COLMAP和SfM的核心功能相似，几乎一样，都是从一组图像中提�
   总而言之，这个函数就是将坐标映射到目标值。一旦该函数确定，那么一个图像/视频/体素就确定了。
 
 $$
-Images:  f: \mathbb{R}^2 \rightarrow \mathbb{R}^3, f(x, y)=(r, g, b)\\
-Videos:  f: \mathbb{R}^3 \rightarrow \mathbb{R}^3, f(x, y, t)=(r, g, b)\\
-Voxels:  f: \mathbb{R}^3 \rightarrow\{0,1\}, f(x, y, z)=p \text { where } p=0
+\begin{aligned}
+\text{Images:}\quad &f: \mathbb{R}^2 \rightarrow \mathbb{R}^3, &&f(x, y)=(r, g, b) \\
+\text{Videos:}\quad &f: \mathbb{R}^3 \rightarrow \mathbb{R}^3, &&f(x, y, t)=(r, g, b) \\
+\text{Voxels:}\quad &f: \mathbb{R}^3 \rightarrow \{0,1\}, &&f(x, y, z)=p,\ \text{where } p=0
+\end{aligned}
 $$
 
 + 高斯函数、符号距离函数
