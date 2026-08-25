@@ -1,4 +1,4 @@
-# 3D Gaussian Splatting
+# 3DGS的表示（1）
 
 【部分摘录】[原文](https://yindaheng98.github.io/%E5%9B%BE%E5%BD%A2%E5%AD%A6/3DGaussianSplatting.html#splatting)
 
@@ -10,9 +10,7 @@
 
 **1D高斯即正态分布：**
 
-$$
-N_{\mu ,\sigma}\left( x \right) =\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{\left( x-\mu \right) ^2}{2\sigma ^2}}
-$$
+$N_{\mu ,\sigma}\left( x \right) =\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{\left( x-\mu \right) ^2}{2\sigma ^2}}$
 
 其图像为一个单钟形对称曲线，均值$\mu$控制对称轴进而控制图形位置，标准差$\sigma$控制密度集中程度。对一段$x$区间进行积分可以得到分布中的数据落在这一区间的概率，其中绝大多数落在$\left[ \mu -3\sigma ,\mu +3\sigma \right]$（概率：0\.9974）。
 
@@ -20,9 +18,7 @@ $$
 
 **3D高斯的正态分布：**
 
-$$
-N_{\mu _x,\sigma _x,\mu _y,\sigma _y,\mu _z,\sigma _z}\left( x,y,z \right) =\frac{1}{\sqrt{2\pi} ^3\sigma _x\sigma _y\sigma _z}\exp \left( -\frac{\left( x-\mu _x \right) ^2}{2{\sigma _x}^2}-\frac{\left( y-\mu _y \right) ^2}{2{\sigma _y}^2}-\frac{\left( z-\mu _z \right) ^2}{2{\sigma _z}^2} \right)
-$$
+$N_{\mu _x,\sigma _x,\mu _y,\sigma _y,\mu _z,\sigma _z}\left( x,y,z \right) =\frac{1}{\sqrt{2\pi} ^3\sigma _x\sigma _y\sigma _z}\exp \left( -\frac{\left( x-\mu _x \right) ^2}{2{\sigma _x}^2}-\frac{\left( y-\mu _y \right) ^2}{2{\sigma _y}^2}-\frac{\left( z-\mu _z \right) ^2}{2{\sigma _z}^2} \right)$
 
 
 
@@ -48,9 +44,9 @@ $$
 
 $p(x_1, \cdots, x_n) = \frac{1}{(2 \pi)^{\frac{n}{2}} \left| \Sigma \right|^{\frac{1}{2}}} \cdot e^{-\frac{1}{2} \cdot [(\vec{X} - \vec{\mu})^\top \Sigma^{-1}(\vec{X} - \vec{\mu})]}$
 
-三维的情况，用$\mathbf{x}=[x,y,z]^T$表示三维空间中的坐标：
+三维的情况，用$\bm x=[x,y,z]^T$表示三维空间中的坐标：
 
-$p(\mathbf{x}) = \frac{1}{\sqrt{2\pi}^3\det(\Sigma)} \cdot e^{-\frac{1}{2}(\mathbf{x} - \vec{\mu})^T \Sigma^{-1}(\mathbf{x} - \vec{\mu})}$
+$p(\bm x) = \frac{1}{\sqrt{2\pi}^3\det(\Sigma)} \cdot e^{-\frac{1}{2}(\bm x - \bm\mu)^T \Sigma^{-1}(\bm x - \bm\mu)}$
 
 此时协方差矩阵$\Sigma$为：
 
@@ -61,7 +57,7 @@ $\Sigma=
          \mathrm{Cov}\left( z,x \right)&                \mathrm{Cov}\left( z,y \right)&                \sigma _{z}^{2}\\
 \end{matrix} \right]$
 
-其中$\vec{\mu}$是椭球中心（控制世界空间位置平移），协方差矩阵$\Sigma$控制椭球在3轴向的伸缩和旋转（模型坐标系），协方差矩阵的特征向量就是椭球对称轴（即，特征向量代表椭球三个主轴方向）
+其中$\bm\mu$是椭球中心（控制世界空间位置平移），协方差矩阵$\Sigma$控制椭球在3轴向的伸缩和旋转（模型坐标系），协方差矩阵的特征向量就是椭球对称轴（即，特征向量代表椭球三个主轴方向）
 
 > 注：在数学上每个高斯分布都覆盖整个空间，当它是椭球是因为它的等高线是椭球。计算的时候显然不能每个像素点上对每个高斯点都采个样，所以实际使用中会把距离中心较远的地方截掉（本文是在概率积分$99\%$的等高线截），截了就看着是一个中心透明度高周围透明度低的椭球。
 > 
@@ -69,13 +65,13 @@ $\Sigma=
 
 论文中的定义方式：
 
-$G\left(\mathbf{x} \right) =e^{-\frac{1}{2}\left(\mathbf{x} \right) ^T\Sigma ^{-1}\left(\mathbf{x} \right)}$
+$G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\bm x \right)}$
 
 和标准形式对比可以看到：
 
 - 默认模型坐标中心在坐标系原点，方便旋转放缩，放入世界坐标系时再加上平移
 
-- 去掉了指数部分前面的归一化系数，所以在空间上的积分不为1，而是在$\mathbf{x}=[0,0,0]^T$处值等于1，所以是一个中间不透明（$G\left(\mathbf{x} \right)$值为1），越往四周越透明的椭球。
+- 去掉了指数部分前面的归一化系数，所以在空间上的积分不为1，而是在$\bm x=[0,0,0]^T$处值等于1，所以是一个中间不透明（$G\left(\bm x \right)$值为1），越往四周越透明的椭球。
 
     - 论文中用一个不透明度值$\alpha$控制Gaussian点整体的透明度，可以让Gaussian点中间也透明
 
@@ -89,7 +85,7 @@ $G\left(\mathbf{x} \right) =e^{-\frac{1}{2}\left(\mathbf{x} \right) ^T\Sigma ^{-
 
 > 像泰勒展开、傅里叶展开中也是一组基函数构成的：
 > 
-> 比如泰勒展开以多项式函数系$\{1,x-x_0,(x-x_0)^2,(x-x_0)^3,\ldots,y_{n}=(x-x_0)^n,\ldots\}$为基函数，
+> 比如泰勒展开以多项式函数系$\{1,x-x_0,(x-x_0)^2,(x-x_0)^3,\dots,y_{n}=(x-x_0)^n,\dots\}$为基函数，
 > 
 > 在对函数$f(x)$的泰勒展开中：
 > 
@@ -98,7 +94,7 @@ $G\left(\mathbf{x} \right) =e^{-\frac{1}{2}\left(\mathbf{x} \right) ^T\Sigma ^{-
 > &=\sum_{n=0}^\infty\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n
 > \end{aligned}$
 > 
-> $\{\frac{f(x_0)}{0!},\frac{f'(x_0)}{1!},\frac{f''(x_0)}{2!},\ldots,\frac{f^{(n)}(x_0)}{n!},\ldots\}$就是这组基函数的系数。
+> $\{\frac{f(x_0)}{0!},\frac{f'(x_0)}{1!},\frac{f''(x_0)}{2!},\dots,\frac{f^{(n)}(x_0)}{n!},\dots\}$就是这组基函数的系数。
 > 
 > 有了基函数，就可以把任意一个函数，描述成几个基函数的加权和了。
 > 
@@ -106,7 +102,7 @@ $G\left(\mathbf{x} \right) =e^{-\frac{1}{2}\left(\mathbf{x} \right) ^T\Sigma ^{-
 
 这里用的是二维直角坐标系下的函数$y=f(x)$举例，而拓展到极坐标系函数$r=f(\theta)$也有多种基函数。
 
-再扩展到三维坐标系下，函数函数$z=f(x,y)$表示一个平面，同样有二维傅里叶级数等二维基函数；而三维极坐标系即球面坐标系函数$r=f(\theta,\phi)$对应的则通常是一个凹凸不平的球面（半径$r$随方向角$(\theta,\phi)$变化且方向角范围为$[-\pi,\pi]$），也同理可以用一系列基函数近似表示，这些基函数称为“球面基函数”。
+再扩展到三维坐标系下，函数$z=f(x,y)$表示一个平面，同样有二维傅里叶级数等二维基函数；而三维极坐标系即球面坐标系函数$r=f(\theta,\phi)$对应的则通常是一个凹凸不平的球面（半径$r$随方向角$(\theta,\phi)$变化且方向角范围为$[-\pi,\pi]$），也同理可以用一系列基函数近似表示，这些基函数称为“球面基函数”。
 
 而球谐函数\(Spherical Harmonics\)就是最有名的球面基函数。球谐函数有很多很好的性质，比如正交性，旋转不变性，就和傅里叶级数里的基函数一样完美。
 
@@ -114,11 +110,11 @@ $G\left(\mathbf{x} \right) =e^{-\frac{1}{2}\left(\mathbf{x} \right) ^T\Sigma ^{-
 
 这里以原文作者举例的二维SH表示的各基函数，可以形象的看到越复杂的基函数可以表示的二维方向可以更多。
 
-![3D Gaussian 示意图](./assets/image-1.png)
+![image\.png](图片和附件/image%201.png)
 
 三维基函数同理：
 
-![3D Gaussian 示意图](./assets/image.png)
+![image\.png](图片和附件/image.png)
 
 用于记录空间中某个点从不同方向看过去的不同颜色，这在点云渲染中非常有用，3DGS就是用球谐函数记录空间中的Gaussian点在不同方向的颜色。
 
@@ -126,52 +122,5 @@ $G\left(\mathbf{x} \right) =e^{-\frac{1}{2}\left(\mathbf{x} \right) ^T\Sigma ^{-
 
 为啥不用更高阶的SH？一方面是因为更多的系数会带来更大的存储压力、计算压力，而一般描述变化比较平滑的环境漫反射部分，用3阶SH就足够了；另一方面则是因为SH的物理含义不是特别好理解，高阶SH容易出现各种花式Artifact，美术同学一般都会认为这种表现属于bug。
 
-## 如何渲染Gaussian？
-
----
-
-渲染Gaussian点就是按照相机位置将3D Gaussian点变换到成像平面上。
-
-### 回顾3D点到2D图像平面的投影过程
-
-坐标变换过程包括：
-
-1. 世界坐标系 → 相机坐标系
-
-2. 三维相机坐标 → 归一化成像平面
-
-3. 归一化平面 → 像素坐标
 
 
-
-**1\.世界坐标系到相机坐标系**
-
-假设三维空间中的一点：
-
-$P_w=
-\begin{bmatrix}
-X_w\\
-Y_w\\
-Z_w
-\end{bmatrix}$
-
-表示该点在世界坐标系中的位置。
-
-根据相机位姿（外参）变换，将世界坐标转换到相机坐标系下：
-
-$P_c=RP_w+t$
-
-$\begin{bmatrix}
-X_c\\
-Y_c\\
-Z_c
-\end{bmatrix}
-=
-R
-\begin{bmatrix}
-X_w\\
-Y_w\\
-Z_w
-\end{bmatrix}
-+
-t$
