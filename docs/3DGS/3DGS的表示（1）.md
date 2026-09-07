@@ -10,7 +10,10 @@
 
 **1D高斯即正态分布：**
 
-$N_{\mu ,\sigma}\left( x \right) =\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{\left( x-\mu \right) ^2}{2\sigma ^2}}$
+$$
+N_{\mu,\sigma}(x)=\frac{1}{\sqrt{2\pi}\sigma}
+\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+$$
 
 其图像为一个单钟形对称曲线，均值$\mu$控制对称轴进而控制图形位置，标准差$\sigma$控制密度集中程度。对一段$x$区间进行积分可以得到分布中的数据落在这一区间的概率，其中绝大多数落在$\left[ \mu -3\sigma ,\mu +3\sigma \right]$（概率：0\.9974）。
 
@@ -18,11 +21,17 @@ $N_{\mu ,\sigma}\left( x \right) =\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{\left( x-
 
 **3D高斯的正态分布：**
 
-$N_{\mu _x,\sigma _x,\mu _y,\sigma _y,\mu _z,\sigma _z}\left( x,y,z \right) =\frac{1}{\sqrt{2\pi} ^3\sigma _x\sigma _y\sigma _z}\exp \left( -\frac{\left( x-\mu _x \right) ^2}{2{\sigma _x}^2}-\frac{\left( y-\mu _y \right) ^2}{2{\sigma _y}^2}-\frac{\left( z-\mu _z \right) ^2}{2{\sigma _z}^2} \right)$
+$$
+N_{\mu_x,\sigma_x,\mu_y,\sigma_y,\mu_z,\sigma_z}(x,y,z)
+=\frac{1}{(2\pi)^{3/2}\sigma_x\sigma_y\sigma_z}
+\exp\left(-\frac{(x-\mu_x)^2}{2\sigma_x^2}
+-\frac{(y-\mu_y)^2}{2\sigma_y^2}
+-\frac{(z-\mu_z)^2}{2\sigma_z^2}\right)
+$$
 
 
 
-这个形式其实是这三个变量为**互不相关****的独立变量**且**椭球的坐标系和世界坐标系平行**的情况。
+这个形式其实是这三个变量为<strong>互不相关的独立变量</strong>，且<strong>椭球的坐标系和世界坐标系平行</strong>的情况。
 
 **但在本文中的3D Gaussian点可以旋转**，所以它的对称轴（后文称为 **模型坐标系** ）不一定和世界坐标系重叠。
 
@@ -42,22 +51,32 @@ $N_{\mu _x,\sigma _x,\mu _y,\sigma _y,\mu _z,\sigma _z}\left( x,y,z \right) =\fr
 
 首先复习联合概率密度函数：
 
-$p(x_1, \cdots, x_n) = \frac{1}{(2 \pi)^{\frac{n}{2}} \left| \Sigma \right|^{\frac{1}{2}}} \cdot e^{-\frac{1}{2} \cdot [(\vec{X} - \vec{\mu})^\top \Sigma^{-1}(\vec{X} - \vec{\mu})]}$
+$$
+p(x_1,\ldots,x_n)=\frac{1}{(2\pi)^{n/2}|\Sigma|^{1/2}}
+\exp\left[-\frac{1}{2}(\mathbf{X}-\boldsymbol{\mu})^{\mathsf T}
+\Sigma^{-1}(\mathbf{X}-\boldsymbol{\mu})\right]
+$$
 
-三维的情况，用$\bm x=[x,y,z]^T$表示三维空间中的坐标：
+三维的情况，用 $\mathbf{x}=[x,y,z]^{\mathsf T}$ 表示三维空间中的坐标：
 
-$p(\bm x) = \frac{1}{\sqrt{2\pi}^3\det(\Sigma)} \cdot e^{-\frac{1}{2}(\bm x - \bm\mu)^T \Sigma^{-1}(\bm x - \bm\mu)}$
+$$
+p(\mathbf{x})=\frac{1}{(2\pi)^{3/2}|\Sigma|^{1/2}}
+\exp\left[-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^{\mathsf T}
+\Sigma^{-1}(\mathbf{x}-\boldsymbol{\mu})\right]
+$$
 
 此时协方差矩阵$\Sigma$为：
 
-$\Sigma=
-\left[ \begin{matrix} 
-        \sigma _{x}^{2}&                \mathrm{Cov}\left( x,y \right)&                \mathrm{Cov}\left( x,z \right)\\
-         \mathrm{Cov}\left( y,x \right)&                \sigma _{y}^{2}&                \mathrm{Cov}\left( y,z \right)\\
-         \mathrm{Cov}\left( z,x \right)&                \mathrm{Cov}\left( z,y \right)&                \sigma _{z}^{2}\\
-\end{matrix} \right]$
+$$
+\Sigma=
+\begin{bmatrix}
+\sigma_x^2 & \mathrm{Cov}(x,y) & \mathrm{Cov}(x,z) \\
+\mathrm{Cov}(y,x) & \sigma_y^2 & \mathrm{Cov}(y,z) \\
+\mathrm{Cov}(z,x) & \mathrm{Cov}(z,y) & \sigma_z^2
+\end{bmatrix}
+$$
 
-其中$\bm\mu$是椭球中心（控制世界空间位置平移），协方差矩阵$\Sigma$控制椭球在3轴向的伸缩和旋转（模型坐标系），协方差矩阵的特征向量就是椭球对称轴（即，特征向量代表椭球三个主轴方向）
+其中 $\boldsymbol{\mu}$ 是椭球中心（控制世界空间位置平移），协方差矩阵 $\Sigma$ 控制椭球在3轴向的伸缩和旋转（模型坐标系），协方差矩阵的特征向量就是椭球对称轴（即，特征向量代表椭球三个主轴方向）
 
 > 注：在数学上每个高斯分布都覆盖整个空间，当它是椭球是因为它的等高线是椭球。计算的时候显然不能每个像素点上对每个高斯点都采个样，所以实际使用中会把距离中心较远的地方截掉（本文是在概率积分$99\%$的等高线截），截了就看着是一个中心透明度高周围透明度低的椭球。
 > 
@@ -65,13 +84,15 @@ $\Sigma=
 
 论文中的定义方式：
 
-$G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\bm x \right)}$
+$$
+G(\mathbf{x})=\exp\left(-\frac{1}{2}\mathbf{x}^{\mathsf T}\Sigma^{-1}\mathbf{x}\right)
+$$
 
 和标准形式对比可以看到：
 
 - 默认模型坐标中心在坐标系原点，方便旋转放缩，放入世界坐标系时再加上平移
 
-- 去掉了指数部分前面的归一化系数，所以在空间上的积分不为1，而是在$\bm x=[0,0,0]^T$处值等于1，所以是一个中间不透明（$G\left(\bm x \right)$值为1），越往四周越透明的椭球。
+- 去掉了指数部分前面的归一化系数，所以在空间上的积分不为1，而是在 $\mathbf{x}=[0,0,0]^{\mathsf T}$ 处值等于1，所以是一个中间不透明（$G(\mathbf{x})$ 值为1），越往四周越透明的椭球。
 
     - 论文中用一个不透明度值$\alpha$控制Gaussian点整体的透明度，可以让Gaussian点中间也透明
 
@@ -89,10 +110,12 @@ $G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\b
 > 
 > 在对函数$f(x)$的泰勒展开中：
 > 
-> $\begin{aligned}
+> $$
+> \begin{aligned}
 > f(x)&=\frac{f(x_0)}{0!}+\frac{f'(x_0)}{1!}(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^2+\cdots+\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n+\cdots\\
 > &=\sum_{n=0}^\infty\frac{f^{(n)}(x_0)}{n!}(x-x_0)^n
-> \end{aligned}$
+> \end{aligned}
+> $$
 > 
 > $\{\frac{f(x_0)}{0!},\frac{f'(x_0)}{1!},\frac{f''(x_0)}{2!},\dots,\frac{f^{(n)}(x_0)}{n!},\dots\}$就是这组基函数的系数。
 > 
@@ -121,5 +144,3 @@ $G\left(\bm x \right) =e^{-\frac{1}{2}\left(\bm x \right) ^T\Sigma ^{-1}\left(\b
 实际应用中的球谐函数基函数一般只用到二阶或三阶。 二阶是4个系数，拓展到rgb，每个颜色通道一个系数，就是4 \* 3 = 12个系数。 三阶是9个系数，拓展到rgb就是9 \* 3 = 27个系数。
 
 为啥不用更高阶的SH？一方面是因为更多的系数会带来更大的存储压力、计算压力，而一般描述变化比较平滑的环境漫反射部分，用3阶SH就足够了；另一方面则是因为SH的物理含义不是特别好理解，高阶SH容易出现各种花式Artifact，美术同学一般都会认为这种表现属于bug。
-
-
