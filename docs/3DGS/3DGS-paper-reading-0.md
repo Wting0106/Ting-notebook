@@ -1,4 +1,4 @@
-### 3DGS论文解读SIGGRAPH 2023
+# 3DGS论文解读 SIGGRAPH 2023
 
 **NeRF 隐式**：是计算密集型的；体渲染；使用了MLP
 

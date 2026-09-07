@@ -37,7 +37,7 @@ module.exports = {
                     children: [
                         '',
                         'TEST0-Implicit-Neural-Representation',
-                        '3DGS论文解读(0)',
+                        ['3DGS-paper-reading-0', '3DGS论文解读(0)'],
                         '3DGS的表示（1）',
                         '3DGS的公式推导（2）'
                     ]
